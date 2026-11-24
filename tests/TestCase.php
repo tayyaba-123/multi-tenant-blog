@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Jobs\DeleteTenantStorage;
 use App\Models\Tenant;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\URL;
@@ -14,15 +15,17 @@ abstract class TestCase extends BaseTestCase
         if ($this->app) {
             tenancy()->end();
 
-            // Tenant databases live outside the central database, so truncation
-            // can't remove them. Drop them directly: tests may fake events,
-            // which would skip the DeleteDatabase listener.
+            // Tenant databases and storage live outside the central database, so
+            // truncation can't remove them. Clean up directly: tests may fake
+            // events, which would skip the TenantDeleted pipeline.
             Tenant::all()->each(function (Tenant $tenant) {
                 $manager = $tenant->database()->manager();
 
                 if ($manager->databaseExists($tenant->database()->getName())) {
                     $manager->deleteDatabase($tenant);
                 }
+
+                (new DeleteTenantStorage($tenant))->handle();
             });
         }
 

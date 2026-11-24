@@ -9,6 +9,8 @@ export default function Create({ statuses }) {
         body: '',
         status: 'draft',
         published_at: '',
+        cover_image: null,
+        remove_cover_image: false,
     });
 
     transform((data) => ({

@@ -65,17 +65,28 @@ export default function Index({ posts }) {
                                 key={post.id}
                                 className="flex flex-col gap-3 px-6 py-4 sm:flex-row sm:items-center sm:justify-between"
                             >
-                                <div className="min-w-0">
-                                    <div className="flex items-center gap-3">
-                                        <StatusBadge status={post.status} />
-                                        <p className="truncate font-medium text-gray-900">
-                                            {post.title}
+                                <div className="flex min-w-0 items-center gap-4">
+                                    {post.cover_image_url ? (
+                                        <img
+                                            src={post.cover_image_url}
+                                            alt=""
+                                            className="h-12 w-20 shrink-0 rounded object-cover"
+                                        />
+                                    ) : (
+                                        <div className="h-12 w-20 shrink-0 rounded bg-gray-100" />
+                                    )}
+                                    <div className="min-w-0">
+                                        <div className="flex items-center gap-3">
+                                            <StatusBadge status={post.status} />
+                                            <p className="truncate font-medium text-gray-900">
+                                                {post.title}
+                                            </p>
+                                        </div>
+                                        <p className="mt-1 text-sm text-gray-500">
+                                            {post.author ?? 'Former writer'} ·{' '}
+                                            <PostDate post={post} />
                                         </p>
                                     </div>
-                                    <p className="mt-1 text-sm text-gray-500">
-                                        {post.author ?? 'Former writer'} ·{' '}
-                                        <PostDate post={post} />
-                                    </p>
                                 </div>
 
                                 <div className="flex shrink-0 items-center gap-4 text-sm font-medium">
@@ -89,7 +100,10 @@ export default function Index({ posts }) {
                                     )}
                                     {post.can.update && (
                                         <Link
-                                            href={route('dashboard.posts.edit', post.id)}
+                                            href={route(
+                                                'dashboard.posts.edit',
+                                                post.id,
+                                            )}
                                             className="text-indigo-600 hover:text-indigo-800"
                                         >
                                             Edit
@@ -113,14 +127,20 @@ export default function Index({ posts }) {
                 {posts.last_page > 1 && (
                     <nav className="mt-6 flex justify-between text-sm">
                         {posts.prev_page_url ? (
-                            <Link href={posts.prev_page_url} className="text-indigo-600">
+                            <Link
+                                href={posts.prev_page_url}
+                                className="text-indigo-600"
+                            >
                                 Previous
                             </Link>
                         ) : (
                             <span />
                         )}
                         {posts.next_page_url && (
-                            <Link href={posts.next_page_url} className="text-indigo-600">
+                            <Link
+                                href={posts.next_page_url}
+                                className="text-indigo-600"
+                            >
                                 Next
                             </Link>
                         )}

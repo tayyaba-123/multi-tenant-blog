@@ -20,6 +20,7 @@ class BlogController extends Controller
                 'title' => $post->title,
                 'slug' => $post->slug,
                 'excerpt' => Str::limit($post->body, 220),
+                'cover_image_url' => $post->coverImageUrl(),
                 'author' => $post->author?->name,
                 'published_at' => $post->published_at->toIso8601String(),
             ]);
@@ -37,6 +38,7 @@ class BlogController extends Controller
             'post' => [
                 'title' => $post->title,
                 'body' => $post->body,
+                'cover_image_url' => $post->coverImageUrl(),
                 'author' => $post->author?->name,
                 'published_at' => $post->published_at->toIso8601String(),
             ],

@@ -27,6 +27,14 @@ export default function Show({ post }) {
                     {post.author && <> · {post.author}</>}
                 </p>
 
+                {post.cover_image_url && (
+                    <img
+                        src={post.cover_image_url}
+                        alt=""
+                        className="mt-8 aspect-[2/1] w-full rounded-xl object-cover"
+                    />
+                )}
+
                 <div className="mt-10 space-y-6 text-lg leading-relaxed text-gray-800">
                     {paragraphs.map((paragraph, index) => (
                         <p key={index} className="whitespace-pre-line">
