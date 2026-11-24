@@ -1,22 +1,21 @@
+import { BrandMark, BrandProvider } from '@/Components/Brand';
 import { Link, usePage } from '@inertiajs/react';
 
 export default function BlogLayout({ children }) {
     const { auth, tenant } = usePage().props;
 
     return (
-        <div className="flex min-h-screen flex-col bg-white text-gray-900">
+        <BrandProvider className="flex min-h-screen flex-col bg-white text-gray-900">
+            <div className="h-1.5 bg-brand" />
             <header className="border-b border-gray-100">
-                <div className="mx-auto flex h-16 max-w-3xl items-center justify-between px-6">
-                    <Link
-                        href={route('home')}
-                        className="text-lg font-bold tracking-tight"
-                    >
-                        {tenant.name}
+                <div className="mx-auto flex h-20 max-w-3xl items-center justify-between px-6">
+                    <Link href={route('home')}>
+                        <BrandMark />
                     </Link>
 
                     <Link
                         href={auth.user ? route('dashboard') : route('login')}
-                        className="text-sm font-medium text-gray-600 hover:text-gray-900"
+                        className="rounded-md bg-brand px-3 py-1.5 text-sm font-semibold text-brand-contrast hover:opacity-90"
                     >
                         {auth.user ? 'Dashboard' : 'Writer login'}
                     </Link>
@@ -30,6 +29,6 @@ export default function BlogLayout({ children }) {
             <footer className="border-t border-gray-100 py-8 text-center text-sm text-gray-500">
                 © {new Date().getFullYear()} {tenant.name}
             </footer>
-        </div>
+        </BrandProvider>
     );
 }

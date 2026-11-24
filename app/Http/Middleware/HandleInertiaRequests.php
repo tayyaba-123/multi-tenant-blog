@@ -34,9 +34,13 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            // The tenant model is loaded from the central database when tenancy
+            // is identified, so branding is read without touching the tenant DB.
             'tenant' => fn () => tenancy()->initialized ? [
-                'id' => tenant('id'),
-                'name' => tenant('name'),
+                'id' => tenant()->id,
+                'name' => tenant()->name,
+                'logo_url' => tenant()->logoUrl(),
+                'brand_color' => tenant()->brand_color,
             ] : null,
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),

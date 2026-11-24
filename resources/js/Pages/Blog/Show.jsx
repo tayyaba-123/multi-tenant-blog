@@ -12,7 +12,7 @@ export default function Show({ post }) {
             <article>
                 <Link
                     href={route('home')}
-                    className="text-sm font-medium text-gray-500 hover:text-gray-900"
+                    className="text-sm font-medium text-brand hover:opacity-80"
                 >
                     ← All posts
                 </Link>

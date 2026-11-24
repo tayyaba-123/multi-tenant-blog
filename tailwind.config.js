@@ -15,6 +15,13 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                // Set per tenant by the BrandProvider wrapper.
+                brand: {
+                    DEFAULT: 'var(--brand)',
+                    contrast: 'var(--brand-contrast)',
+                },
+            },
         },
     },
 
