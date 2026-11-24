@@ -34,6 +34,10 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'tenant' => fn () => tenancy()->initialized ? [
+                'id' => tenant('id'),
+                'name' => tenant('name'),
+            ] : null,
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
             ],

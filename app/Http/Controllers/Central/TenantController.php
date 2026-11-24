@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Central;
 use App\Actions\CreateTenant;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Central\StoreTenantRequest;
+use App\Models\Post;
 use App\Models\Tenant;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -20,6 +21,8 @@ class TenantController extends Controller
             'domain' => $tenant->primaryDomain(),
             'logo_url' => $tenant->logoUrl(),
             'brand_color' => $tenant->brand_color,
+            // Posts live in each tenant's own database, so count inside its context.
+            'posts_count' => $tenant->run(fn () => Post::count()),
             'created_at' => $tenant->created_at->toDateString(),
         ]);
 

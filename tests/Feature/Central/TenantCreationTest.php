@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Post;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
@@ -111,6 +112,22 @@ test('guests can not create tenants', function () {
         ->assertRedirect(route('central.login'));
 
     expect(Tenant::count())->toBe(0);
+});
+
+test("the tenants list shows each tenant's post count from its own database", function () {
+    $acme = $this->createTenant('acme');
+    $globex = $this->createTenant('globex');
+
+    $acme->run(fn () => Post::factory()->count(3)->create());
+    $globex->run(fn () => Post::factory()->published()->create());
+
+    $this->actingAs($this->admin)
+        ->get('http://blogs.test/admin/tenants')
+        ->assertInertia(fn ($page) => $page
+            ->where('tenants', fn ($tenants) => collect($tenants)
+                ->pluck('posts_count', 'id')
+                ->sortKeys()
+                ->all() === ['acme' => 3, 'globex' => 1]));
 });
 
 test('the tenants list shows every tenant with its domain', function () {
