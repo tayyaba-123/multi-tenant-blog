@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 
 export default function Home() {
     return (
@@ -12,6 +12,12 @@ export default function Home() {
                     A white-label blogging platform. Each company gets its own
                     branded blog on its own domain.
                 </p>
+                <Link
+                    href={route('central.tenants.index')}
+                    className="mt-8 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
+                >
+                    Admin dashboard
+                </Link>
             </main>
         </>
     );
