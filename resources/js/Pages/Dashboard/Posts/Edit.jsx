@@ -4,21 +4,25 @@ import { fromLocalInputValue, toLocalInputValue } from '@/lib/dates';
 import { Head, useForm } from '@inertiajs/react';
 
 export default function Edit({ post, statuses }) {
-    const { data, setData, put, processing, errors, transform } = useForm({
+    const { data, setData, post: submitForm, processing, errors, transform } = useForm({
         title: post.title,
         body: post.body,
         status: post.status,
         published_at: toLocalInputValue(post.published_at),
+        cover_image: null,
+        remove_cover_image: false,
     });
 
+    // Files can only be sent as multipart POST, so spoof the PUT method.
     transform((data) => ({
         ...data,
+        _method: 'put',
         published_at: fromLocalInputValue(data.published_at),
     }));
 
     const submit = (e) => {
         e.preventDefault();
-        put(route('dashboard.posts.update', post.id));
+        submitForm(route('dashboard.posts.update', post.id));
     };
 
     return (
@@ -40,6 +44,7 @@ export default function Edit({ post, statuses }) {
                     statuses={statuses}
                     onSubmit={submit}
                     submitLabel="Save changes"
+                    currentCoverUrl={post.cover_image_url}
                 />
             </div>
         </AuthenticatedLayout>

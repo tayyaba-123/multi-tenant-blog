@@ -21,6 +21,15 @@ export default function Index({ posts }) {
                 <div className="mt-12 space-y-12">
                     {posts.data.map((post) => (
                         <article key={post.id}>
+                            {post.cover_image_url && (
+                                <Link href={route('blog.show', post.slug)}>
+                                    <img
+                                        src={post.cover_image_url}
+                                        alt=""
+                                        className="mb-5 aspect-[2/1] w-full rounded-xl object-cover"
+                                    />
+                                </Link>
+                            )}
                             <p className="text-sm text-gray-500">
                                 <time dateTime={post.published_at}>
                                     {formatDate(post.published_at)}

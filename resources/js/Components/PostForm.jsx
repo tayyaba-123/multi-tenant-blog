@@ -1,3 +1,4 @@
+import CoverImageInput from '@/Components/CoverImageInput';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -12,6 +13,7 @@ export default function PostForm({
     statuses,
     onSubmit,
     submitLabel,
+    currentCoverUrl = null,
 }) {
     return (
         <form
@@ -29,6 +31,27 @@ export default function PostForm({
                 />
                 <InputError message={errors.title} className="mt-2" />
             </div>
+
+            <CoverImageInput
+                file={data.cover_image}
+                currentUrl={currentCoverUrl}
+                removed={data.remove_cover_image}
+                onChange={(file) => {
+                    setData((data) => ({
+                        ...data,
+                        cover_image: file,
+                        remove_cover_image: false,
+                    }));
+                }}
+                onRemove={() => {
+                    setData((data) => ({
+                        ...data,
+                        cover_image: null,
+                        remove_cover_image: true,
+                    }));
+                }}
+                error={errors.cover_image}
+            />
 
             <div>
                 <InputLabel htmlFor="body" value="Body" />
