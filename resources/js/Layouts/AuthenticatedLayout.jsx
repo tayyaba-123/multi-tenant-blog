@@ -1,4 +1,3 @@
-import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
@@ -6,7 +5,8 @@ import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
 export default function AuthenticatedLayout({ header, children }) {
-    const user = usePage().props.auth.user;
+    const { auth, tenant, flash } = usePage().props;
+    const user = auth.user;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
@@ -18,17 +18,23 @@ export default function AuthenticatedLayout({ header, children }) {
                     <div className="flex h-16 justify-between">
                         <div className="flex">
                             <div className="flex shrink-0 items-center">
-                                <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
+                                <Link
+                                    href={route('dashboard.posts.index')}
+                                    className="text-lg font-bold text-gray-900"
+                                >
+                                    {tenant?.name}
                                 </Link>
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
-                                    href={route('dashboard')}
-                                    active={route().current('dashboard')}
+                                    href={route('dashboard.posts.index')}
+                                    active={route().current('dashboard.posts.*')}
                                 >
-                                    Dashboard
+                                    Posts
+                                </NavLink>
+                                <NavLink href={route('home')} active={false}>
+                                    View blog
                                 </NavLink>
                             </div>
                         </div>
@@ -129,10 +135,13 @@ export default function AuthenticatedLayout({ header, children }) {
                 >
                     <div className="space-y-1 pb-3 pt-2">
                         <ResponsiveNavLink
-                            href={route('dashboard')}
-                            active={route().current('dashboard')}
+                            href={route('dashboard.posts.index')}
+                            active={route().current('dashboard.posts.*')}
                         >
-                            Dashboard
+                            Posts
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('home')}>
+                            View blog
                         </ResponsiveNavLink>
                     </div>
 
@@ -170,7 +179,16 @@ export default function AuthenticatedLayout({ header, children }) {
                 </header>
             )}
 
-            <main>{children}</main>
+            <main>
+                {flash?.success && (
+                    <div className="mx-auto mt-6 max-w-7xl px-4 sm:px-6 lg:px-8">
+                        <div className="rounded-lg bg-green-50 px-4 py-3 text-sm text-green-800 ring-1 ring-green-200">
+                            {flash.success}
+                        </div>
+                    </div>
+                )}
+                {children}
+            </main>
         </div>
     );
 }
