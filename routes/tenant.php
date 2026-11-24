@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -24,7 +25,8 @@ Route::middleware([
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
-    Route::get('/', fn () => 'This is the blog of tenant '.tenant('id'))->name('home');
+    Route::get('/', [BlogController::class, 'index'])->name('home');
+    Route::get('/posts/{post:slug}', [BlogController::class, 'show'])->name('blog.show');
 
     Route::get('/dashboard', fn () => Inertia::render('Dashboard'))
         ->middleware(['auth', 'verified'])
