@@ -33,7 +33,7 @@ abstract class TestCase extends BaseTestCase
     {
         $id ??= 't'.Str::lower(Str::random(10));
 
-        $tenant = Tenant::create(['id' => $id, ...$attributes]);
+        $tenant = Tenant::create(['id' => $id, 'name' => Str::headline($id), ...$attributes]);
         $tenant->domains()->create(['domain' => $this->tenantDomain($id)]);
 
         return $tenant->load('domains');
