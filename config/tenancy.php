@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Models\Tenant;
 use Stancl\Tenancy\Database\Models\Domain;
-use Stancl\Tenancy\Database\Models\Tenant;
 
 return [
     'tenant_model' => Tenant::class,
@@ -16,10 +16,12 @@ return [
      *
      * Only relevant if you're using the domain or subdomain identification middleware.
      */
-    'central_domains' => [
-        '127.0.0.1',
-        'localhost',
-    ],
+    'central_domains' => array_filter(explode(',', env('CENTRAL_DOMAINS', 'blogs.test,localhost,127.0.0.1'))),
+
+    /**
+     * Tenant domains are created as "{subdomain}.{base_domain}".
+     */
+    'base_domain' => env('TENANT_BASE_DOMAIN', 'blogs.test'),
 
     /**
      * Tenancy bootstrappers are executed when tenancy is initialized.
@@ -51,7 +53,7 @@ return [
          * Tenant database names are created like this:
          * prefix + tenant_id + suffix.
          */
-        'prefix' => 'tenant',
+        'prefix' => env('TENANCY_DB_PREFIX', 'tenant_'),
         'suffix' => '',
 
         /**
@@ -100,7 +102,7 @@ return [
         /**
          * Each disk listed in the 'disks' array will be suffixed by the suffix_base, followed by the tenant_id.
          */
-        'suffix_base' => 'tenant',
+        'suffix_base' => 'tenant_',
         'disks' => [
             'local',
             'public',
@@ -136,7 +138,7 @@ return [
          * disable asset() helper tenancy and explicitly use tenant_asset() calls in places
          * where you want to use tenant-specific assets (product images, avatars, etc).
          */
-        'asset_helper_tenancy' => true,
+        'asset_helper_tenancy' => false,
     ],
 
     /**
