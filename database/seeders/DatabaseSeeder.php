@@ -8,13 +8,15 @@ use Illuminate\Database\Seeder;
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Seed the central database.
+     * Seed the central database and the demo tenants.
      */
     public function run(): void
     {
-        User::factory()->create([
-            'name' => 'Platform Admin',
-            'email' => 'admin@blogs.test',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@blogs.test'],
+            ['name' => 'Platform Admin', 'password' => 'password'],
+        );
+
+        $this->call(DemoTenantsSeeder::class);
     }
 }
