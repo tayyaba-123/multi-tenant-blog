@@ -14,9 +14,16 @@ abstract class TestCase extends BaseTestCase
         if ($this->app) {
             tenancy()->end();
 
-            // Deleting tenants also drops their databases, which the central
-            // truncation below would otherwise leave behind.
-            Tenant::all()->each->delete();
+            // Tenant databases live outside the central database, so truncation
+            // can't remove them. Drop them directly: tests may fake events,
+            // which would skip the DeleteDatabase listener.
+            Tenant::all()->each(function (Tenant $tenant) {
+                $manager = $tenant->database()->manager();
+
+                if ($manager->databaseExists($tenant->database()->getName())) {
+                    $manager->deleteDatabase($tenant);
+                }
+            });
         }
 
         parent::tearDown();
