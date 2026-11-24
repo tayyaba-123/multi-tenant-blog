@@ -18,7 +18,14 @@ return Application::configure(basePath: dirname(__DIR__))
             AddLinkHeadersForPreloadedAssets::class,
         ]);
 
-        //
+        // Writers sign in on their tenant's domain, admins on the central domain.
+        $middleware->redirectGuestsTo(fn () => tenancy()->initialized
+            ? route('login')
+            : route('central.login'));
+
+        $middleware->redirectUsersTo(fn () => tenancy()->initialized
+            ? route('dashboard')
+            : route('central.tenants.index'));
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
