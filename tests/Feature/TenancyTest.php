@@ -2,6 +2,7 @@
 
 use App\Models\Tenant;
 use Illuminate\Support\Facades\DB;
+use Stancl\Tenancy\Exceptions\TenantCouldNotBeIdentifiedOnDomainException;
 
 function databaseExists(string $name): bool
 {
@@ -49,7 +50,7 @@ test('unknown domains do not resolve to a tenant', function () {
     $this->withoutExceptionHandling();
 
     $this->get('http://unknown.blogs.test/');
-})->throws(Stancl\Tenancy\Exceptions\TenantCouldNotBeIdentifiedOnDomainException::class);
+})->throws(TenantCouldNotBeIdentifiedOnDomainException::class);
 
 test('the central domain serves the central app', function () {
     $this->get('http://blogs.test/')->assertOk();
