@@ -34,6 +34,8 @@ class PostRequest extends FormRequest
                 Rule::requiredIf($this->input('status') === PostStatus::Scheduled->value),
                 Rule::when($this->input('status') === PostStatus::Scheduled->value, ['after:now']),
             ],
+            'cover_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'remove_cover_image' => ['boolean'],
         ];
     }
 

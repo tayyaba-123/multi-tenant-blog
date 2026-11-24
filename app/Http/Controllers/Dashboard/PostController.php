@@ -24,6 +24,7 @@ class PostController extends Controller
                 'title' => $post->title,
                 'slug' => $post->slug,
                 'status' => $post->status,
+                'cover_image_url' => $post->coverImageUrl(),
                 'published_at' => $post->published_at?->toIso8601String(),
                 'updated_at' => $post->updated_at->toIso8601String(),
                 'author' => $post->author?->name,
@@ -47,7 +48,13 @@ class PostController extends Controller
 
     public function store(PostRequest $request): RedirectResponse
     {
-        $request->user()->posts()->create($request->postAttributes());
+        $post = $request->user()->posts()->make($request->postAttributes());
+
+        if ($request->hasFile('cover_image')) {
+            $post->replaceCoverImage($request->file('cover_image'));
+        }
+
+        $post->save();
 
         return redirect()->route('dashboard.posts.index')->with('success', 'Post created.');
     }
@@ -64,6 +71,7 @@ class PostController extends Controller
                 'body' => $post->body,
                 'status' => $post->status,
                 'published_at' => $post->published_at?->toIso8601String(),
+                'cover_image_url' => $post->coverImageUrl(),
             ],
             'statuses' => $this->statuses(),
         ]);
@@ -71,7 +79,15 @@ class PostController extends Controller
 
     public function update(PostRequest $request, Post $post): RedirectResponse
     {
-        $post->update($request->postAttributes($post));
+        $post->fill($request->postAttributes($post));
+
+        if ($request->hasFile('cover_image')) {
+            $post->replaceCoverImage($request->file('cover_image'));
+        } elseif ($request->boolean('remove_cover_image')) {
+            $post->deleteCoverImage();
+        }
+
+        $post->save();
 
         return redirect()->route('dashboard.posts.index')->with('success', 'Post updated.');
     }
