@@ -1,10 +1,20 @@
 import TenantAvatar from '@/Components/TenantAvatar';
 import CentralLayout from '@/Layouts/CentralLayout';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 
 export default function Index({ tenants }) {
     return (
-        <CentralLayout title="Tenants">
+        <CentralLayout
+            title="Tenants"
+            actions={
+                <Link
+                    href={route('central.tenants.create')}
+                    className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
+                >
+                    New blog
+                </Link>
+            }
+        >
             <Head title="Tenants" />
 
             {tenants.length === 0 ? (

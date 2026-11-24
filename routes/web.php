@@ -22,6 +22,8 @@ foreach (array_reverse(config('tenancy.central_domains')) as $domain) {
                 Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
                 Route::get('tenants', [TenantController::class, 'index'])->name('tenants.index');
+                Route::get('tenants/create', [TenantController::class, 'create'])->name('tenants.create');
+                Route::post('tenants', [TenantController::class, 'store'])->name('tenants.store');
             });
         });
     });
