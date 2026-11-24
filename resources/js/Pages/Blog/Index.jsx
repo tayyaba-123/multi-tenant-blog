@@ -10,7 +10,7 @@ export default function Index({ posts }) {
             <Head title={tenant.name} />
 
             <h1 className="text-4xl font-bold tracking-tight">
-                Latest from {tenant.name}
+                Latest from <span className="text-brand">{tenant.name}</span>
             </h1>
 
             {posts.data.length === 0 ? (
@@ -39,7 +39,7 @@ export default function Index({ posts }) {
                             <h2 className="mt-2 text-2xl font-semibold tracking-tight">
                                 <Link
                                     href={route('blog.show', post.slug)}
-                                    className="hover:underline"
+                                    className="hover:text-brand"
                                 >
                                     {post.title}
                                 </Link>

@@ -1,3 +1,4 @@
+import { BrandMark, BrandProvider } from '@/Components/Brand';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
@@ -5,31 +6,33 @@ import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
 export default function AuthenticatedLayout({ header, children }) {
-    const { auth, tenant, flash } = usePage().props;
+    const { auth, flash } = usePage().props;
     const user = auth.user;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100">
-            <nav className="border-b border-gray-100 bg-white">
+        <BrandProvider className="min-h-screen bg-gray-100">
+            <nav className="border-b border-t-4 border-gray-100 border-t-brand bg-white">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
                         <div className="flex">
                             <div className="flex shrink-0 items-center">
                                 <Link
                                     href={route('dashboard.posts.index')}
-                                    className="text-lg font-bold text-gray-900"
+                                    className="text-gray-900"
                                 >
-                                    {tenant?.name}
+                                    <BrandMark className="h-8 w-8" />
                                 </Link>
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
                                     href={route('dashboard.posts.index')}
-                                    active={route().current('dashboard.posts.*')}
+                                    active={route().current(
+                                        'dashboard.posts.*',
+                                    )}
                                 >
                                     Posts
                                 </NavLink>
@@ -189,6 +192,6 @@ export default function AuthenticatedLayout({ header, children }) {
                 )}
                 {children}
             </main>
-        </div>
+        </BrandProvider>
     );
 }

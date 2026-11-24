@@ -22,7 +22,12 @@
         <env name="APP_URL" value="http://blogs.test"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
-        <env name="CACHE_STORE" value="array"/>
+        <!-- Redis, not array: tenancy rebuilds the cache manager on every
+             context switch, which would wipe an in-memory store and make
+             cache isolation tests pass for the wrong reason. -->
+        <env name="CACHE_STORE" value="redis"/>
+        <env name="REDIS_CLIENT" value="predis"/>
+        <env name="REDIS_CACHE_DB" value="15"/>
         <env name="CENTRAL_DOMAINS" value="blogs.test,localhost"/>
         <env name="TENANT_BASE_DOMAIN" value="blogs.test"/>
         <env name="TENANCY_DB_PREFIX" value="testing_tenant_"/>

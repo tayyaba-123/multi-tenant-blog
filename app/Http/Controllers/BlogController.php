@@ -3,18 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Support\BlogCache;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class BlogController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $posts = Post::published()
+        $page = max(1, $request->integer('page', 1));
+
+        $posts = BlogCache::homepage($page, fn () => Post::published()
             ->with('author:id,name')
             ->latest('published_at')
-            ->paginate(10)
+            ->paginate(10, page: $page)
             ->through(fn (Post $post) => [
                 'id' => $post->id,
                 'title' => $post->title,
@@ -23,7 +27,8 @@ class BlogController extends Controller
                 'cover_image_url' => $post->coverImageUrl(),
                 'author' => $post->author?->name,
                 'published_at' => $post->published_at->toIso8601String(),
-            ]);
+            ])
+            ->toArray());
 
         return Inertia::render('Blog/Index', [
             'posts' => $posts,

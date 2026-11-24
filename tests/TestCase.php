@@ -5,6 +5,7 @@ namespace Tests;
 use App\Jobs\DeleteTenantStorage;
 use App\Models\Tenant;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
@@ -27,6 +28,12 @@ abstract class TestCase extends BaseTestCase
 
                 (new DeleteTenantStorage($tenant))->handle();
             });
+
+            // Flush the dedicated test cache DB directly: with faked events the
+            // tenant-tagged cache manager may still be bound.
+            if (config('cache.default') === 'redis') {
+                Redis::connection('cache')->flushdb();
+            }
         }
 
         parent::tearDown();
