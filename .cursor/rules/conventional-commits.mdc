@@ -1,0 +1,30 @@
+---
+description: Commit message and pull request conventions
+alwaysApply: true
+---
+
+# Commits
+
+Every commit follows Conventional Commits: `type(scope): description`.
+
+- Types: `feat`, `fix`, `refactor`, `test`, `docs`, `style`, `chore`, `build`, `ci`, `perf`.
+- Scope is optional and names the area: `tenancy`, `auth`, `admin`, `posts`, `blog`, `media`, `queue`, `cache`, `branding`, `deps`.
+- Description is lowercase, imperative, no trailing period, under 72 characters.
+- One logical change per commit. Tests may ship with the change they cover.
+- Never add AI attribution, `Co-authored-by` or "Generated with" lines.
+
+```text
+# Good
+feat(posts): add scheduled status to post form
+fix(tenancy): pin queue jobs table to the central connection
+
+# Bad
+Updated stuff
+feat: Added posts CRUD, images and caching.
+```
+
+# Branches and pull requests
+
+- One feature per branch, named `feat/<feature>` (or `fix/`, `chore/`).
+- PR description has three sections: **What changed**, **Why**, **How I tested**.
+- CI must be green before requesting review. Authors never merge their own PRs.

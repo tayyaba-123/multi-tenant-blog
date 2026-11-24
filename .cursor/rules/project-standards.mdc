@@ -1,0 +1,38 @@
+---
+description: Laravel, tenancy and React coding standards for this project
+alwaysApply: true
+---
+
+# Stack
+
+Laravel 11, stancl/tenancy ^3.8 (database per tenant, identified by domain),
+Inertia + React (JSX) + Tailwind, Pest. Do not upgrade to Laravel 12+.
+
+# Tenancy
+
+- Central code: `routes/web.php` (wrapped in `central_domains`), central models, `database/migrations`.
+- Tenant code: `routes/tenant.php`, tenant models, `database/migrations/tenant`.
+- Never query tenant tables from central context without `$tenant->run(fn () => ...)`.
+- Jobs dispatched in tenant context must rely on `QueueTenancyBootstrapper`; do not pass tenant ids manually.
+- Tenant uploads go on the `public` disk inside tenant context and are served with `tenant_asset()`.
+- Central assets (tenant logos) use the central `public` disk and `/storage` URLs.
+- Cache inside tenant context is tagged per tenant automatically. Don't add extra tags that could
+  flush other tenants' entries.
+
+# PHP
+
+- Validate with FormRequest classes; authorize with policies.
+- Keep controllers thin; put multi-step writes in `app/Actions`.
+- Use enums for fixed value sets (e.g. `PostStatus`).
+- Run `vendor/bin/pint` before committing.
+
+# React
+
+- Pages live in `resources/js/Pages/{Central,Dashboard,Blog}`; shared UI in `Components`.
+- Use Ziggy's `route()` helper, never hard-coded URLs.
+- Render user content as text, never with `dangerouslySetInnerHTML`.
+
+# Tests
+
+- Every feature ships with Pest feature tests; tenant-facing tests live in `tests/Feature/Tenant`.
+- Isolation matters: when a feature stores data, add a test that another tenant can't see it.
