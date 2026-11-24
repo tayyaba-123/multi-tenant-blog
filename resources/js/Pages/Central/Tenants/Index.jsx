@@ -28,6 +28,7 @@ export default function Index({ tenants }) {
                             <tr>
                                 <th className="px-4 py-3">Blog</th>
                                 <th className="px-4 py-3">Domain</th>
+                                <th className="px-4 py-3 text-right">Posts</th>
                                 <th className="px-4 py-3">Brand color</th>
                                 <th className="px-4 py-3">Created</th>
                             </tr>
@@ -54,6 +55,9 @@ export default function Index({ tenants }) {
                                         >
                                             {tenant.domain}
                                         </a>
+                                    </td>
+                                    <td className="px-4 py-3 text-right font-medium tabular-nums text-slate-900">
+                                        {tenant.posts_count}
                                     </td>
                                     <td className="px-4 py-3">
                                         <span className="inline-flex items-center gap-2 font-mono text-xs text-slate-600">
